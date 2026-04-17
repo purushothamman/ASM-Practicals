@@ -1,35 +1,15 @@
-import pandas as pd
 import numpy as np
-from scipy.stats import norm
-import matplotlib.pyplot as plt
+from scipy.stats import binomtest
+from statsmodels.sandbox.stats.runs import runstest_1samp
 
+# Sign Test
+before = np.array([20,22,19,24,21])
+after  = np.array([23,25,20,26,22])
 
-Data = {
-    'gender': ['male','female','male','female','male','female','male','female'],
-    'height': [170, 160, 168, 158, 175, 165, 172, 162]
-}
-df = pd.DataFrame(Data)
+diff = after - before
+p = binomtest(sum(diff>0), len(diff), 0.5).pvalue
+print(p)
 
-female = df[df['gender']=='female']
-female =female.drop(columns=['gender'])
-print(female)
-
-
-#MEan and SD
-
-mean = female['height'].mean()
-sd = female['height'].std()
-print("Mean:", mean)
-print("SD:", sd)
-
-#Hist 
-
-plt.hist(female, density=True)
-
-x = np.linspace(140,190,100)
-y = norm.pdf(x,mean,sd)
-plt.plot(x,y)
-plt.title("Normal Distribution (Female Height)")
-plt.xlabel("Height")
-plt.ylabel("Density")
-plt.show()
+# Run Test
+data = np.array([1,2,3,2,1,2,3])
+print(runstest_1samp(data)[1])
